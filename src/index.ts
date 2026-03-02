@@ -9,21 +9,28 @@ const client = new Client({
     port: 5432,
 });
 
-async function testConnexion() {
+async function executionSecurisee() {
     try {
         await client.connect();
-        console.log("Succès ! Le code est lié à PostgresSQL.");
+        await client.query('BEGIN');
 
-        const res = await client.query('SELECT * FROM "Livre"');
-        console.log("\n--- LIVRES DANS PGADMIN ---");
-        console.table(res.rows);
+        const updateLivre = 'Update "Livre" SET statut = $1 WHERE id = $2';
+        await client.query(updateLivre, ['EMPRUNTE', 1]);
+
+        const logEmprunt = 'INSERT INTO "Emprunter" (nom_utilisateur) VALUES ($1)';
+        await client.query(logEmprunt, ['Abdullah']);
+
+        await client.query('COMMIT');
+        console.log("Transaction réussie !");
+        
     } catch (error) {
-        console.error("Erreur de connexion :", error);
+        await client.query('ROLLEBACK');
+        console.error("Erreur de transaction annulée :", error);
     } finally {
         await client.end();
     }
 }
 
-testConnexion();
+executionSecurisee();
 
 

@@ -11,7 +11,11 @@ async function testConnexion() {
     try {
         await client.connect();
         console.log("Succès ! Le code est lié à PostgresSQL.");
-        const res = await client.query('SELECT * FROM "Livre"');
+        const res = await client.query(`
+            SELECT "Livre".titre, "Auteur".nom AS auteur_nom
+            FROM "Livre"
+            LEFT JOIN "Auteur" ON "Livre".auteur_id = "Auteur".id
+        `);
         console.log("\n--- LIVRES DANS PGADMIN ---");
         console.table(res.rows);
     }
