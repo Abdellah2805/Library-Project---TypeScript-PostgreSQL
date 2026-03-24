@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",        // 👈 Indique que le code est bien ici
+    "outDir": "./dist",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],    // 👈 Ne compile QUE ce qui est dans backend/src
+  "exclude": ["node_modules", "dist"]
+}
