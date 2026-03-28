@@ -1,22 +1,24 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios';
 import './Login.css'; 
 
-interface LoginProps {
-    onSwitch: () => void;
-    onLoginSuccess: () => void;
-}
-
-export const Login = ({ onSwitch, onLoginSuccess }: LoginProps) => { 
+export const Login = () => { 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault(); 
         try {
             const response = await api.post('/login', { email, password });
             localStorage.setItem('token', response.data.token);
-            onLoginSuccess();
+            localStorage.setItem('userRole', response.data.role);
+            localStorage.setItem('username', response.data.username);
+            
+            // Redirection vers l'accueil et rafraîchissement pour mettre à jour la Navbar
+            navigate('/');
+            window.location.reload();
         } catch (error) {
             console.error(error);
             alert("Erreur : identifiants incorrects");
@@ -25,14 +27,14 @@ export const Login = ({ onSwitch, onLoginSuccess }: LoginProps) => {
 
     return ( 
         <div className="login-page"> 
-            <div className="login-card"> {/* Changé de login-container à login-card */}
+            <div className="login-card">
                 <div className="login-header">
                     <h1>MaBibli</h1>
                     <p className="subtitle">Heureux de vous revoir !</p>
                 </div>
 
                 <form onSubmit={handleLogin} className="login-form">
-                    <div className="input-field"> {/* Changé de input-group à input-field */}
+                    <div className="input-field">
                         <label>Email professionnel</label>
                         <input
                             type="email"
@@ -43,7 +45,7 @@ export const Login = ({ onSwitch, onLoginSuccess }: LoginProps) => {
                         />
                     </div>
 
-                    <div className="input-field"> {/* Changé de input-group à input-field */}
+                    <div className="input-field">
                         <label>Mot de passe</label>
                         <input
                             type="password"
@@ -54,14 +56,16 @@ export const Login = ({ onSwitch, onLoginSuccess }: LoginProps) => {
                         />
                     </div>
 
-                    <button type="submit" className="login-submit-btn"> {/* Changé de login-button à login-submit-btn */}
+                    <button type="submit" className="login-submit-btn">
                         Se connecter
                     </button>
 
                     <div className="login-footer">
                         <p>
                             Pas encore de compte ? 
-                            <span onClick={onSwitch} style={{ cursor: 'pointer', marginLeft: '5px' }}>S'inscrire</span>
+                            <Link to="/register" style={{ marginLeft: '5px', color: '#6366f1', textDecoration: 'none', fontWeight: 'bold' }}>
+                                S'inscrire
+                            </Link>
                         </p>
                     </div>
                 </form>

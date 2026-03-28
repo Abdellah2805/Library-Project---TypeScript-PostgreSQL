@@ -1,0 +1,140 @@
+/* La modal utilise déjà .modal-overlay et .modal-content de ton projet */
+
+.cart-modal {
+    max-width: 450px;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+}
+
+.cart-modal h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #0f172a;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 40px 0;
+    color: #64748b;
+    font-style: italic;
+}
+
+/* Liste des articles */
+.cart-items-list {
+    overflow-y: auto;
+    flex-grow: 1;
+    margin-bottom: 20px;
+    padding-right: 10px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.cart-item img {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cart-item-info {
+    flex-grow: 1;
+}
+
+.cart-item-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.cart-item-info p {
+    margin: 4px 0 0 0;
+    color: #0284c7;
+    font-weight: 700;
+}
+
+/* Bouton supprimer individuel */
+.remove-item {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.remove-item:hover {
+    background: #fee2e2;
+}
+
+/* Résumé et bouton confirmation */
+.cart-summary {
+    padding-top: 20px;
+    border-top: 2px solid #f1f5f9;
+}
+
+.cart-summary .total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 15px;
+}
+
+.cart-summary .total span {
+    color: #0284c7;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #0284c7;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.confirm-btn:hover {
+    background-color: #0369a1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+.confirm-btn:active {
+    transform: translateY(0);
+}
+
+/* Scrollbar personnalisée pour la liste */
+.cart-items-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cart-items-list::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.cart-items-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}

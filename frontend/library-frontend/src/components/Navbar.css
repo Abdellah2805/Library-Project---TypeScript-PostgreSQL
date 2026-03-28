@@ -1,55 +1,179 @@
+/* RESET de base pour être sûr qu'aucun parent ne bloque */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 10%;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px); /* Effet flou moderne */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    
+    /* FORCE LA LARGEUR TOTALE */
+    width: 100vw;           /* 100% de la largeur de la fenêtre */
+    margin-left: calc(-50vw + 50%); /* Technique pour sortir d'un conteneur parent restreint */
+    left: 0;
+    right: 0;
+    
+    box-sizing: border-box; 
+    padding: 0 20px;       /* Juste un petit espace de sécurité pour que le logo ne touche pas l'écran */
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
+    z-index: 1000;
+}
+
+/* GAUCHE : Logo */
+.nav-left {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .nav-logo {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 800;
-    color: var(--primary);
+    color: #4f46e5;
     text-decoration: none;
-    letter-spacing: -1px;
+    white-space: nowrap;
 }
 
-.logout-btn {
-    background-color: #fee2e2;
-    color: #ef4444;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
+/* CENTRE : Recherche + Menu */
+.nav-center {
+    flex: 2; /* Prend le plus de place possible au milieu */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px; 
 }
 
-.logout-btn:hover {
-    background-color: #ef4444;
-    color: white;
+.search-container {
+    width: 350px; /* Plus large pour faire plus pro */
 }
-
-.nav-left { display: flex; align-items: center; gap: 40px; flex: 1; }
-
-.search-container { width: 100%; max-width: 400px; }
 
 .search-input {
     width: 100%;
-    padding: 10px 15px;
-    border: 1px solid #e2e8f0;
+    padding: 10px 18px;
     border-radius: 20px;
-    background: #f1f5f9;
-    transition: all 0.3s;
+    border: 1px solid #e5e7eb;
+    background: #f3f4f6;
+    outline: none;
 }
 
-.search-input:focus {
-    outline: none;
+.nav-menu {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-item-link {
+    text-decoration: none;
+    color: #374151;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 12px;
+    white-space: nowrap; /* EMPÊCHE LA SUPERPOSITION DES MOTS */
+    transition: all 0.2s ease;
+}
+
+.nav-item-link:hover {
+    background: #f5f3ff;
+    color: #4f46e5;
+    transform: translateY(-1px);
+}
+
+/* DROITE : Déconnexion */
+.nav-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.logout-btn {
+    background: #fee2e2;
+    color: #ef4444;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    background: #ef4444;
+    color: white;
+}
+
+/* --- STYLES DU PANIER --- */
+
+.cart-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    padding: 5px;
+}
+
+.cart-container:hover {
+    transform: scale(1.1);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: #ef4444; /* Rouge vif */
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white; /* Pour le faire ressortir */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* On s'assure que le panier et le bouton logout sont bien alignés */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Style rapide pour la modal du panier si tu n'as pas encore de Cart.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
     background: white;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    position: relative;
+    width: 90%;
+    max-width: 450px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #64748b;
 }

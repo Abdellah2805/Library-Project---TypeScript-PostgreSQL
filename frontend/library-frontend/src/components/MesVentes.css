@@ -1,0 +1,26 @@
+.ventes-container { max-width: 900px; margin: 40px auto; padding: 20px; }
+.ventes-header { margin-bottom: 30px; border-bottom: 2px solid #f3f4f6; padding-bottom: 20px; }
+.ventes-header h1 { color: #111827; font-size: 2rem; }
+
+.vente-card {
+    display: flex; gap: 20px; background: white; padding: 20px;
+    border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px; transition: transform 0.2s;
+}
+
+.vente-card:hover { transform: translateY(-3px); }
+.vente-img { width: 90px; height: 130px; object-fit: cover; border-radius: 8px; }
+
+.vente-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.vente-main-info { display: flex; justify-content: space-between; align-items: flex-start; }
+.vente-price { background: #ecfdf5; color: #059669; padding: 4px 12px; border-radius: 20px; font-weight: bold; }
+
+.buyer-name { 
+    color: #4f46e5; /* Couleur indigo pour le nom de l'acheteur */
+    font-weight: 700;
+    background: #f5f3ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.vente-details p { margin: 4px 0; color: #6b7280; font-size: 0.95rem; }

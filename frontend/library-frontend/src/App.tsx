@@ -1,86 +1,81 @@
 import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
+import { BookList } from './components/BookList';
+import { BookDetails } from './components/BookDetails';
 import { Login } from './components/Login';
 import { Register } from './components/Register';
-import { BookList } from './components/BookList';
-import { AddBook } from './components/AddBook';
-import { AdminDashboard } from './components/AdminDashboard';
-import { jwtDecode} from 'jwt-decode'; 
 import './App.css';
+import { MesVentes } from './components/MesVentes';
 
+interface CartItem {
+    id: number;
+    titre: string;
+    prix: number;
+    image_url: string;
+}
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [userRole, setUserRole] = useState<string>('')
-  const [showRegister, setShowRegister] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0); // Pour forcer le rechargement des livres
+    const [searchTerm, setSearchTerm] = useState('');
+    const [cart, setCart] = useState<CartItem[]>([]);
 
-  // Fonction pour déclencher le rafraîchissement de la liste
-  const handleBookAdded = () => {
-    setRefreshKey(prev => prev + 1);
-  };
+    useEffect(() => {
+        const saved = localStorage.getItem('cart');
+        if (saved) {
+            try {
+                setCart(JSON.parse(saved));
+            } catch (e) {
+                console.error("Erreur lecture panier", e);
+            }
+        }
+    }, []);
 
-  useEffect(() => {
-    if (token) {
-      try {
-        const decoded: any = jwtDecode(token);
-        setUserRole(decoded.role);  
-      } catch (e) { localStorage.clear(); }
-    }
-  }, [token]);
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }, [cart]);
 
-  if (!token) {
+    const addToCart = (book: any) => {
+        if (cart.some(item => item.id === book.id)) {
+            alert("Ce livre est déjà dans votre panier.");
+            return;
+        }
+        setCart([...cart, { 
+            id: book.id, 
+            titre: book.titre, 
+            prix: Number(book.prix), 
+            image_url: book.image_url 
+        }]);
+    };
+
+    const removeFromCart = (id: number) => {
+        setCart(cart.filter(item => item.id !== id));
+    };
+    
+
+    const clearCart = () => setCart([]);
+
     return (
-      <div className="auth-screen">
-        {showRegister ? (
-          <Register onSwitch={() => setShowRegister(false)} />
-        ) : (
-          <Login 
-            onSwitch={() => setShowRegister(true)} 
-            onLoginSuccess={() => setToken(localStorage.getItem('token'))} 
-          />
-        )}
-      </div>
-    );
-  }
-
-  if (userRole === 'Admin') {
-    return <AdminDashboard />;
-  }
-
-  return (
-    <div className="app-container">
-      <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      
-      <main className="main-content">
-        <header className="welcome-banner">
-          <div className="banner-text">
-            <h1>Bienvenue dans votre espace</h1>
+        <div className="app-container">
+            <Navbar 
+                searchTerm={searchTerm} 
+                setSearchTerm={setSearchTerm} 
+                cartItems={cart} 
+                onRemoveFromCart={removeFromCart}
+                onClearCart={clearCart}
+            />
             
-          </div>
-          {userRole === 'Auteur' && (
-            <button className="open-add-btn" onClick={() => setShowAddModal(true)}>
-            + Ajouter un livre
-          </button>
-          )}
-          
-        </header>
-
-        {/* On passe la refreshKey pour que BookList se mette à jour */}
-        <BookList key={refreshKey} searchTerm={searchTerm} />
-      </main>
-
-      {/* Affichage conditionnel de la Modal */}
-      {showAddModal && (
-        <AddBook 
-          onClose={() => setShowAddModal(false)} 
-          onBookAdded={handleBookAdded} 
-        />
-      )}
-    </div>
-  );
+            <div className="main-content">
+                <Routes>
+                    <Route path="/" element={<BookList searchTerm={searchTerm} />} />
+                    <Route path="/livre/:id" element={<BookDetails onAddToCart={addToCart} />} />
+                    <Route path="/mes-livres" element={<BookList searchTerm={searchTerm} personalOnly={true} />} />
+                    <Route path="/mes-ventes" element={<MesVentes />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                </Routes>
+            </div>
+        </div>
+    );
 }
 
 export default App;

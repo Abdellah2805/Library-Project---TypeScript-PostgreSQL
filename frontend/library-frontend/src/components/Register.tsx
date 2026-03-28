@@ -1,17 +1,15 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios';
 import './Register.css'; 
 
-interface RegisterProps {
-    onSwitch: () => void;
-}
-
-export const Register = ({ onSwitch }: RegisterProps) => {
+export const Register = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: '',
-        role: 'Emprunteur' // Rôle par défaut
+        role: 'Emprunteur'
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -26,7 +24,7 @@ export const Register = ({ onSwitch }: RegisterProps) => {
         try {
             await api.post('/register', formData);
             alert(`Compte ${formData.role} créé avec succès !`);
-            onSwitch();
+            navigate('/login'); // Redirige vers la page de connexion
         } catch (error: any) {
             console.error("Erreur d'inscription:", error);
             alert(error.response?.data?.error || "Erreur lors de l'inscription");
@@ -34,11 +32,11 @@ export const Register = ({ onSwitch }: RegisterProps) => {
     };
 
     return (
-        <div className="login-page"> {/* Utilise la classe parente de Login.css */}
-            <div className="login-card"> {/* Utilise la structure de carte de Login.css */}
+        <div className="login-page">
+            <div className="login-card">
                 <div className="login-header">
                     <h1>MaBibli</h1>
-                    <p className="subtitle">Rejoignez notre communauté de lecteurs</p>
+                    <p className="subtitle">Rejoignez notre communauté</p>
                 </div>
 
                 <form className="login-form" onSubmit={handleSubmit}>
@@ -47,7 +45,7 @@ export const Register = ({ onSwitch }: RegisterProps) => {
                         <input 
                             name="username"
                             type="text"
-                            placeholder="Ex: Jean Dupont"
+                            placeholder="Votre nom"
                             onChange={handleChange}
                             required
                         />
@@ -58,9 +56,9 @@ export const Register = ({ onSwitch }: RegisterProps) => {
                         <input 
                             name="email"
                             type="email"
-                            placeholder="nom@exemple.com"
+                            placeholder="votre@email.com"
                             onChange={handleChange}
-                            required    
+                            required
                         />
                     </div>
 
@@ -83,9 +81,8 @@ export const Register = ({ onSwitch }: RegisterProps) => {
                             onChange={handleChange}
                             className="role-select" 
                         >
-                            <option  value="Emprunteur">Emprunteur (Lire des livres)</option>
-                            <option  value="Auteur">Auteur (Publier des livres)</option>
-                            <option value="Admin">Administrateur</option>
+                            <option value="Emprunteur">Emprunteur (Lire des livres)</option>
+                            <option value="Auteur">Auteur (Publier des livres)</option>
                         </select>
                     </div>
                             
@@ -95,7 +92,11 @@ export const Register = ({ onSwitch }: RegisterProps) => {
                 </form>
 
                 <div className="login-footer">
-                    <p>Déjà un compte ? <span onClick={onSwitch}>Se connecter</span></p>
+                    <p>Déjà un compte ? 
+                        <Link to="/login" style={{ marginLeft: '5px', color: '#6366f1', textDecoration: 'none', fontWeight: 'bold' }}>
+                            Se connecter
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>
